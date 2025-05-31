@@ -9,8 +9,8 @@ import com.example.wellnessmate.ui.screen.DashboardScreen
 import com.example.wellnessmate.ui.screen.HydrationScreen
 import com.example.wellnessmate.ui.screen.LoginScreen
 import com.example.wellnessmate.ui.screen.MoodJournalScreen
-import com.example.wellnessmate.ui.screen.ProfileSettingsScreen
 import com.example.wellnessmate.ui.screen.RegisterScreen
+import com.example.wellnessmate.ui.screen.SettingsScreen
 import com.example.wellnessmate.ui.screen.SplashScreen
 
 sealed class Screen(val route: String) {
@@ -21,7 +21,7 @@ sealed class Screen(val route: String) {
     object Hydration : Screen("hydration")
     object MoodJournal : Screen("mood")
     object DailyGoals : Screen("goals")
-    object Profile : Screen("profile")
+    object Settings : Screen("settings")
 }
 
 @Composable
@@ -31,9 +31,9 @@ fun SetupNavGraph(navController: NavHostController) {
         composable(Screen.Login.route) { LoginScreen(navController) }
         composable(Screen.Register.route) { RegisterScreen(navController) }
         composable(Screen.Dashboard.route) { DashboardScreen(navController) }
-        composable(Screen.Hydration.route) { HydrationScreen() }
-        composable(Screen.MoodJournal.route) { MoodJournalScreen() }
-        composable(Screen.DailyGoals.route) { DailyGoalsScreen() }
-        composable(Screen.Profile.route) { ProfileSettingsScreen() }
+        composable(Screen.Hydration.route) { HydrationScreen(navController) }
+        composable(Screen.MoodJournal.route) { MoodJournalScreen(navController) }
+        composable(Screen.DailyGoals.route) { DailyGoalsScreen(navController) }
+        composable(Screen.Settings.route) { SettingsScreen(navController) }
     }
 }

@@ -6,21 +6,30 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.wellnessmate.data.dao.DailyGoalDao
 import com.example.wellnessmate.data.dao.HydrationDao
-import com.example.wellnessmate.data.dao.MoodDao // Pastikan import ini ada
+import com.example.wellnessmate.data.dao.MoodDao
+import com.example.wellnessmate.data.dao.UserDao
 import com.example.wellnessmate.data.entity.HydrationEntity
-import com.example.wellnessmate.data.entity.MoodEntryEntity // Sesuaikan jika kamu punya entitas ini
+import com.example.wellnessmate.data.entity.MoodEntryEntity
 import com.example.wellnessmate.data.entity.DailyGoalEntity
+import com.example.wellnessmate.data.entity.UserEntity // Add this import!
 
 @Database(
-    entities = [HydrationEntity::class, MoodEntryEntity::class, DailyGoalEntity::class], // Tambahkan entitas Mood jika sudah ada
-    version = 1,
+    entities = [
+        HydrationEntity::class,
+        MoodEntryEntity::class,
+        DailyGoalEntity::class,
+        UserEntity::class
+    ],
+    version = 2,  // Increment version since you're adding a new entity
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun hydrationDao(): HydrationDao
-    abstract fun moodDao(): MoodDao // Harus mengembalikan interface MoodDao
+    abstract fun moodDao(): MoodDao
     abstract fun dailyGoalDao(): DailyGoalDao
+    abstract fun userDao(): UserDao
+
     companion object {
         private var INSTANCE: AppDatabase? = null
 
@@ -30,7 +39,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "wellnessmate.db"
-                ).build().also { INSTANCE = it }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build().also { INSTANCE = it }
             }
         }
     }

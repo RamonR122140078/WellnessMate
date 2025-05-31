@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger.hilt)
     kotlin("kapt")
 }
 
@@ -60,7 +61,18 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
+
+
+    //AndroidX Work
+    implementation(libs.work.runtime.ktx)
+
+    // Hilt Dependencies
+    implementation(libs.dagger.hilt)
+    implementation(libs.hilt.work)
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
     // Room Persistence Library
     implementation(libs.androidx.room.runtime)
