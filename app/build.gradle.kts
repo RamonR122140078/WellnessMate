@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
     kotlin("kapt")
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -64,6 +65,9 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
 
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
 
     //AndroidX Work
     implementation(libs.work.runtime.ktx)

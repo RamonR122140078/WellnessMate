@@ -1,5 +1,6 @@
 package com.example.wellnessmate.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -51,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.wellnessmate.R
 import com.example.wellnessmate.Screen
+import com.example.wellnessmate.utils.AuthHelper
 
 @Composable
 fun LoginScreen(
@@ -66,6 +69,7 @@ fun LoginScreen(
     // Input validation states
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     // Email validation function
     fun isValidEmail(email: String): Boolean {
@@ -221,9 +225,15 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         if (validateForm()) {
-                            // Handle login logic here
-                            // For now, navigate to dashboard
-                            navController.navigate(Screen.Dashboard.route)
+                            AuthHelper.login(email, password,
+                                onSuccess = {
+                                    navController.navigate(Screen.Dashboard.route)
+                                },
+                                onError = { errorMessage ->
+                                    // Show error using Snackbar, Toast, or dialog
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                                }
+                            )
                         }
                     },
                     modifier = Modifier

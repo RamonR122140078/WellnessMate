@@ -1,8 +1,14 @@
 package com.example.wellnessmate.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -11,19 +17,36 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.wellnessmate.R
 import com.example.wellnessmate.Screen
+import com.example.wellnessmate.utils.AuthHelper
+
 
 @Composable
 fun RegisterScreen(
@@ -41,6 +64,7 @@ fun RegisterScreen(
     // Validation
     var emailError by remember { mutableStateOf(false) }
     var passwordMismatchError by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -175,8 +199,14 @@ fun RegisterScreen(
                 Button(
                     onClick = {
                         if (validateForm()) {
-                            // Simulate registration, then navigate to login
-                            navController.navigate(Screen.Login.route)
+                            AuthHelper.register(email, password,
+                                onSuccess = {
+                                    navController.navigate(Screen.Login.route)
+                                },
+                                onError = { errorMessage ->
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                                }
+                            )
                         }
                     },
                     modifier = Modifier
